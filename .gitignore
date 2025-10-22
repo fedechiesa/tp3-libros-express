@@ -1,0 +1,22 @@
+# Dependencias
+node_modules/
+
+# Archivos de logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos temporales o de entorno
+.env
+*.env
+
+# Cache y build
+dist/
+build/
+.tmp/
+.DS_Store
+
+# Archivos del editor
+.idea/
+.vscode/
+*.iml

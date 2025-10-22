@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Ingresar Libro</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; }
+    form { display: grid; gap: 12px; }
+    label { display: grid; gap: 6px; }
+    input { padding: 8px; font-size: 1rem; }
+    button { padding: 10px 14px; font-size: 1rem; cursor: pointer; }
+    .msg { margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <h1>Ingresar Libro</h1>
+  <form id="form-libro" method="POST" action="/libros">
+    <label>
+      Título
+      <input name="titulo" required />
+    </label>
+    <label>
+      Autor
+      <input name="autor" required />
+    </label>
+    <label>
+      Año
+      <input name="anio" type="number" required />
+    </label>
+    <button type="submit">Guardar</button>
+  </form>
+
+  <div class="msg" id="msg"></div>
+
+  <p>
+    Ver todos los libros: <a href="/libros" target="_blank">/libros</a>
+  </p>
+
+  <script>
+    // Intercepto el submit para mostrar feedback sin salir de la página
+    const form = document.getElementById('form-libro');
+    const msg = document.getElementById('msg');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const data = Object.fromEntries(fd.entries());
+      try {
+        const r = await fetch('/libros', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await r.json();
+        if (!r.ok) throw new Error(json.error || 'Error al crear');
+        msg.textContent = `✅ Libro creado (id ${json.id})`;
+        form.reset();
+      } catch (err) {
+        msg.textContent = `❌ ${err.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
